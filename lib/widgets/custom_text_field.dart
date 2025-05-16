@@ -15,6 +15,7 @@ class CustomTextField extends StatelessWidget {
   final TextInputType keyboardType;
   final IconData? iconPrefix;
   final List<TextInputFormatter> formatters;
+  final String? Function(String?)? validator;
 
   const CustomTextField({
     super.key,
@@ -28,6 +29,7 @@ class CustomTextField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.iconPrefix,
     this.formatters = const [],
+    this.validator,
   });
 
   @override
@@ -68,6 +70,8 @@ class CustomTextField extends StatelessWidget {
                 paddinghorizontal: 0,
                 keyboardType: keyboardType,
                 editingbordercolor: colorScheme.primary,
+                errorbordercolor: colorScheme.error,
+
                 idlebordercolor:
                     disabled
                         ? colorScheme.onSurface.withValues(alpha: 0.3)
@@ -77,6 +81,7 @@ class CustomTextField extends StatelessWidget {
                 hintText: hintText,
                 controller: controller,
                 inputFormatters: formatters,
+                validator: validator,
                 style: getTextStyle(
                   context,
                   16,

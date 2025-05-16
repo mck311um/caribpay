@@ -1,7 +1,7 @@
 import 'package:caribpay/constants/text_styles.dart';
 import 'package:caribpay/constants/transitions.dart';
 import 'package:caribpay/constants/values.dart';
-import 'package:caribpay/screens/auth/views/sign_up_screen.dart';
+import 'package:caribpay/screens/auth/views/login_screen.dart';
 import 'package:caribpay/widgets/custom_text_field.dart';
 import 'package:caribpay/widgets/logo.dart';
 import 'package:caribpay/widgets/password_field.dart';
@@ -9,33 +9,44 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/components/button/gf_button.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  final maskFormatter = MaskTextInputFormatter(
+    mask: '(###) ### - ####',
+    filter: {"#": RegExp(r'[0-9]')},
+  );
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final size = MediaQuery.of(context).size;
+
     return Scaffold(
-      appBar: AppBar(automaticallyImplyLeading: false, title: Logo()),
+      appBar: AppBar(automaticallyImplyLeading: false, title: const Logo()),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: fPadding),
         child: SingleChildScrollView(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const SizedBox(height: fSpacing),
               Text(
-                'Welcome Back',
+                'Create your account',
                 style: getTextStyle(
                   context,
                   24,
@@ -46,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               Text(
-                'Sign in to your account',
+                'Sign up to get started',
                 style: getTextStyle(
                   context,
                   16,
@@ -56,17 +67,37 @@ class _LoginScreenState extends State<LoginScreen> {
                   FontStyle.normal,
                 ),
               ),
-              const SizedBox(height: fSpacing * 1.25),
+              const SizedBox(height: fSpacing),
+              CustomTextField(
+                controller: _firstNameController,
+                hintText: 'John',
+                labelText: "First Name",
+              ),
+              const SizedBox(height: fSmallSpacing),
+              CustomTextField(
+                controller: _firstNameController,
+                hintText: 'Doe',
+                labelText: "Last Name",
+              ),
+              const SizedBox(height: fSmallSpacing),
               CustomTextField(
                 controller: _emailController,
                 hintText: 'your@email.com',
                 labelText: "Email",
                 iconPrefix: FluentIcons.mail_32_regular,
               ),
-              const SizedBox(height: fSpacing),
+              const SizedBox(height: fSmallSpacing),
+              CustomTextField(
+                controller: _phoneNumberController,
+                hintText: '+1 234 567 8900',
+                labelText: "Phone Number",
+                iconPrefix: FluentIcons.phone_32_regular,
+              ),
+              const SizedBox(height: fSmallSpacing),
               PasswordField(
                 controller: _passwordController,
                 iconPrefix: FluentIcons.lock_closed_32_regular,
+                showForgotPassword: false,
               ),
               const SizedBox(height: fSpacing * 2),
               SizedBox(
@@ -81,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     PhosphorIcons.signIn(),
                     color: colorScheme.onPrimary,
                   ),
-                  text: "Sign In",
+                  text: "Sign Up",
                   textStyle: getTextStyle(
                     context,
                     18,
@@ -96,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: fSmallSpacing),
               RichText(
                 text: TextSpan(
-                  text: 'Don\'t have an account? ',
+                  text: 'Already have an account? ',
                   style: getTextStyle(
                     context,
                     16,
@@ -112,10 +143,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             ..onTap = () {
                               Navigator.push(
                                 context,
-                                rightToLeft(context, const SignUpScreen()),
+                                rightToLeft(context, const LoginScreen()),
                               );
                             },
-                      text: 'Sign Up',
+                      text: 'Sign In',
                       style: getTextStyle(
                         context,
                         16,
@@ -128,7 +159,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: fSpacing * 2),
             ],
           ),
         ),

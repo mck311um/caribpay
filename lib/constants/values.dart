@@ -9,5 +9,6 @@ const double fLargeSpacing = 80.0;
 const double fButtonHeight = 50.0;
 const double fButtonWidth = 250.0;
 const double fBorderRadius = 8.0;
+const double fLargeBorderRadius = 16.0;
 const double fNavIconSize = 35.0;
 const double fNavBarHeight = 70.0;

@@ -97,7 +97,7 @@ class _LogoState extends State<Logo> with SingleTickerProviderStateMixin {
           text: TextSpan(
             style: getTextStyle(
               context,
-              30,
+              28,
               FontWeight.bold,
               colorScheme.onSurface,
               TextDecoration.none,

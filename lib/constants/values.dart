@@ -1,0 +1,13 @@
+const double fCircle = 50.0;
+const double fPadding = 16.0;
+const double fHeight = 16.0;
+const double fOpacity = .46;
+const double fSmallSpacing = 8.0;
+const double fMediumSpacing = 12.0;
+const double fSpacing = 16.0;
+const double fLargeSpacing = 80.0;
+const double fButtonHeight = 50.0;
+const double fButtonWidth = 250.0;
+const double fBorderRadius = 8.0;
+const double fNavIconSize = 35.0;
+const double fNavBarHeight = 70.0;

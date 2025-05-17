@@ -6,6 +6,7 @@ import 'package:caribpay/providers/account_provider.dart';
 import 'package:caribpay/providers/auth_provider.dart';
 import 'package:caribpay/screens/home/views/all_accounts.dart';
 import 'package:caribpay/screens/home/widgets/account_card.dart';
+import 'package:caribpay/screens/home/widgets/add_account_button.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:persistent_bottom_nav_bar_2/persistent_tab_view.dart';
@@ -120,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     if (primaryAccount != null)
                       AccountCard(account: primaryAccount),
                     const SizedBox(height: fSpacing),
-                    _buildAddAccountButton(colorScheme, context),
+                    AddAccountButton(),
                   ],
                 ),
                 const SizedBox(height: fSpacing * 2),
@@ -137,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 const SizedBox(height: fSmallSpacing),
                 SizedBox(
-                  height: fButtonHeight * 1.1,
+                  height: fButtonHeight,
                   child: Row(
                     children: [
                       Expanded(
@@ -153,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             borderShape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(
-                                fLargeBorderRadius,
+                                fBorderRadius,
                               ),
                             ),
                             textStyle: getTextStyle(
@@ -176,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: CustomColors.coral,
                             borderShape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(
-                                fLargeBorderRadius,
+                                fBorderRadius,
                               ),
                             ),
                             icon: Icon(
@@ -201,45 +202,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Container _buildAddAccountButton(
-    ColorScheme colorScheme,
-    BuildContext context,
-  ) {
-    return Container(
-      height: 40,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(fBorderRadius * 2),
-        border: Border.all(
-          width: 2,
-          color: colorScheme.onSurface.withValues(alpha: 0.1),
-        ),
-      ),
-      child: GFButton(
-        color: Colors.transparent,
-        borderShape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(fLargeBorderRadius),
-        ),
-        splashColor: colorScheme.primary.withValues(alpha: 0.1),
-        highlightColor: colorScheme.primary.withValues(alpha: 0.1),
-        focusColor: colorScheme.primary.withValues(alpha: 0.1),
-        hoverColor: colorScheme.primary.withValues(alpha: 0.1),
-        elevation: 0,
-        icon: Icon(Icons.add, color: colorScheme.onSurface, size: 16),
-        onPressed: () {},
-        text: 'Add Account',
-        textStyle: getTextStyle(
-          context,
-          14,
-          FontWeight.w500,
-          colorScheme.onSurface,
-          TextDecoration.none,
-          FontStyle.normal,
         ),
       ),
     );

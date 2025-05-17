@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:caribpay/data/models/user.dart';
 import 'package:caribpay/data/repo/auth_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/web.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider extends ChangeNotifier {
   UserModel? _user;
@@ -33,14 +36,34 @@ class AuthProvider extends ChangeNotifier {
 
     final res = await _repo.login(email, password);
     if (res != null) {
+      _user = res.user;
       _token = res.token;
       _isSignedIn = true;
-      logger.i('User logged in: ${_user?.email}');
+      await saveToSharedPreferences();
     } else {
-      logger.e('Login failed');
+      _isSignedIn = false;
     }
 
     _isLoading = false;
+    notifyListeners();
+  }
+
+  Future saveToSharedPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', _token ?? '');
+    await prefs.setString('user', jsonEncode(_user?.toJson()));
+  }
+
+  Future loadFromSharedPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    _token = prefs.getString('token');
+    String? userJson = prefs.getString('user');
+    if (_token != null && _token!.isNotEmpty && userJson != null) {
+      _user = UserModel.fromJson(jsonDecode(userJson));
+      _isSignedIn = true;
+    } else {
+      _isSignedIn = false;
+    }
     notifyListeners();
   }
 }

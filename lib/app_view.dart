@@ -3,6 +3,7 @@ import 'package:caribpay/providers/auth_provider.dart';
 import 'package:caribpay/providers/theme_provider.dart';
 import 'package:caribpay/screens/auth/views/login_screen.dart';
 import 'package:caribpay/screens/home/views/home_screen.dart';
+import 'package:caribpay/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
@@ -25,7 +26,7 @@ class _AppViewState extends State<AppView> {
         themeMode: themeProvider.themeMode,
         theme: (ThemeData(colorScheme: lightColorScheme)),
         darkTheme: (ThemeData(colorScheme: darkColorScheme)),
-        home: authProvider.isSignedIn ? HomeScreen() : LoginScreen(),
+        home: authProvider.isSignedIn ? BottomBar() : LoginScreen(),
       ),
     );
   }

@@ -26,6 +26,7 @@ class AuthRepo with IAuthRepository {
 
       return AuthData.fromJson(res.data);
     } catch (e) {
+      logger.e('Login error: $e');
       var message = '';
       if (e is DioException) {
         final data = e.response?.data;

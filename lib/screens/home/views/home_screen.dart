@@ -1,9 +1,15 @@
+import 'package:caribpay/constants/color_scheme.dart';
 import 'package:caribpay/constants/text_styles.dart';
 import 'package:caribpay/constants/values.dart';
+import 'package:caribpay/data/models/account.dart';
+import 'package:caribpay/providers/account_provider.dart';
 import 'package:caribpay/providers/auth_provider.dart';
 import 'package:caribpay/screens/home/views/all_accounts.dart';
+import 'package:caribpay/screens/home/widgets/account_card.dart';
 import 'package:flutter/material.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:persistent_bottom_nav_bar_2/persistent_tab_view.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,7 +23,18 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final authProvider = context.watch<AuthProvider>();
+    final accountProvider = context.watch<AccountProvider>();
     final colorScheme = Theme.of(context).colorScheme;
+
+    final accounts = accountProvider.accounts;
+    final Account? primaryAccount =
+        accounts.isNotEmpty
+            ? accounts.firstWhere(
+              (a) => a.isPrimary,
+              orElse: () => null as Account,
+            )
+            : null;
+    final otherAccounts = accounts.where((a) => !a.isPrimary).toList();
 
     return Scaffold(
       body: SafeArea(
@@ -97,10 +114,132 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ],
                 ),
-                // Add your widgets here
+                const SizedBox(height: fSpacing),
+                Column(
+                  children: [
+                    if (primaryAccount != null)
+                      AccountCard(account: primaryAccount),
+                    const SizedBox(height: fSpacing),
+                    _buildAddAccountButton(colorScheme, context),
+                  ],
+                ),
+                const SizedBox(height: fSpacing * 2),
+                Text(
+                  'Quick Actions',
+                  style: getTextStyle(
+                    context,
+                    18,
+                    FontWeight.w500,
+                    colorScheme.onSurface,
+                    TextDecoration.none,
+                    FontStyle.normal,
+                  ),
+                ),
+                const SizedBox(height: fSmallSpacing),
+                SizedBox(
+                  height: fButtonHeight * 1.1,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: SizedBox.expand(
+                          child: GFButton(
+                            onPressed: () {},
+                            text: 'Send Money',
+                            color: CustomColors.turquoise,
+                            icon: Icon(
+                              PhosphorIcons.arrowUpRight(),
+                              color: Colors.white,
+                              size: 24,
+                            ),
+                            borderShape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                fLargeBorderRadius,
+                              ),
+                            ),
+                            textStyle: getTextStyle(
+                              context,
+                              16,
+                              FontWeight.w500,
+                              Colors.white,
+                              TextDecoration.none,
+                              FontStyle.normal,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: fSmallSpacing),
+                      Expanded(
+                        child: SizedBox.expand(
+                          child: GFButton(
+                            onPressed: () {},
+                            text: 'Receive Money',
+                            color: CustomColors.coral,
+                            borderShape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                fLargeBorderRadius,
+                              ),
+                            ),
+                            icon: Icon(
+                              PhosphorIcons.arrowDownLeft(),
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                            textStyle: getTextStyle(
+                              context,
+                              16,
+                              FontWeight.w500,
+                              Colors.white,
+                              TextDecoration.none,
+                              FontStyle.normal,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Container _buildAddAccountButton(
+    ColorScheme colorScheme,
+    BuildContext context,
+  ) {
+    return Container(
+      height: 40,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(fBorderRadius * 2),
+        border: Border.all(
+          width: 2,
+          color: colorScheme.onSurface.withValues(alpha: 0.1),
+        ),
+      ),
+      child: GFButton(
+        color: Colors.transparent,
+        borderShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(fLargeBorderRadius),
+        ),
+        splashColor: colorScheme.primary.withValues(alpha: 0.1),
+        highlightColor: colorScheme.primary.withValues(alpha: 0.1),
+        focusColor: colorScheme.primary.withValues(alpha: 0.1),
+        hoverColor: colorScheme.primary.withValues(alpha: 0.1),
+        elevation: 0,
+        icon: Icon(Icons.add, color: colorScheme.onSurface, size: 16),
+        onPressed: () {},
+        text: 'Add Account',
+        textStyle: getTextStyle(
+          context,
+          14,
+          FontWeight.w500,
+          colorScheme.onSurface,
+          TextDecoration.none,
+          FontStyle.normal,
         ),
       ),
     );

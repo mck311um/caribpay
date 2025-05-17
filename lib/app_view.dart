@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:caribpay/constants/color_scheme.dart';
+import 'package:caribpay/providers/account_provider.dart';
 import 'package:caribpay/providers/admin_provider.dart';
 import 'package:caribpay/providers/auth_provider.dart';
 import 'package:caribpay/providers/theme_provider.dart';
@@ -32,7 +33,10 @@ class _AppViewState extends State<AppView> {
   void loadData() async {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final adminProvider = context.read<AdminProvider>();
+      final accountProvider = context.read<AccountProvider>();
+
       await adminProvider.fetchAdminData();
+      await accountProvider.fetchAccounts();
     });
   }
 

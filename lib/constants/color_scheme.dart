@@ -37,6 +37,11 @@ const lightColorScheme = ColorScheme(
   onInverseSurface: Color(0xFFF1F5F9),
   inversePrimary: Color(0xFFBAE6FD),
   surfaceTint: Color(0xFF0EA5E9),
+  surfaceContainerHighest: Color(0xFFE9ECEF),
+  surfaceContainerHigh: Color(0xFFEFF1F3),
+  surfaceContainer: Color(0xFFF5F7F8),
+  surfaceContainerLow: Color(0xFFFAFBFB),
+  surfaceContainerLowest: Color(0xFFFFFFFF),
 );
 
 const darkColorScheme = ColorScheme(

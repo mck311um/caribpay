@@ -33,7 +33,6 @@ class AuthProvider extends ChangeNotifier {
 
     final res = await _repo.login(email, password);
     if (res != null) {
-      _user = res.user;
       _token = res.token;
       _isSignedIn = true;
       logger.i('User logged in: ${_user?.email}');

@@ -1,3 +1,5 @@
+// ignore_for_file: cast_from_null_always_fails
+
 import 'package:caribpay/constants/color_scheme.dart';
 import 'package:caribpay/constants/text_styles.dart';
 import 'package:caribpay/constants/values.dart';

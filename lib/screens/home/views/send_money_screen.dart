@@ -4,7 +4,6 @@ import 'package:caribpay/constants/enums.dart';
 import 'package:caribpay/constants/text_styles.dart';
 import 'package:caribpay/constants/values.dart';
 import 'package:caribpay/data/models/account.dart';
-import 'package:caribpay/data/models/country.dart';
 import 'package:caribpay/data/models/peer.dart';
 import 'package:caribpay/providers/account_provider.dart';
 import 'package:caribpay/screens/home/widgets/add_peer.dart';

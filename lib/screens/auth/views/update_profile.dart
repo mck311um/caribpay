@@ -30,7 +30,6 @@ class _UpdateProfileState extends State<UpdateProfile> {
   final _countryController = TextEditingController();
   final _idTypeController = TextEditingController();
   final _idNumberController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
   bool _isButtonEnabled = false;
 
   DateTime? dob;

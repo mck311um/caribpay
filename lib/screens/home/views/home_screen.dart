@@ -120,6 +120,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     if (primaryAccount != null)
                       AccountCard(account: primaryAccount),
+                    ListView.builder(
+                      itemCount: otherAccounts.length,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return AccountCard(account: otherAccounts[index]);
+                      },
+                    ),
                     const SizedBox(height: fSpacing),
                     AddAccountButton(),
                   ],
@@ -148,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             text: 'Send Money',
                             color: CustomColors.turquoise,
                             icon: Icon(
-                              PhosphorIcons.arrowUpRight(),
+                              PhosphorIconsBold.arrowUpRight,
                               color: Colors.white,
                               size: 24,
                             ),
@@ -160,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             textStyle: getTextStyle(
                               context,
                               16,
-                              FontWeight.w500,
+                              FontWeight.w700,
                               Colors.white,
                               TextDecoration.none,
                               FontStyle.normal,
@@ -181,14 +189,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             icon: Icon(
-                              PhosphorIcons.arrowDownLeft(),
+                              PhosphorIconsBold.arrowDownLeft,
                               color: Colors.white,
                               size: 20,
                             ),
                             textStyle: getTextStyle(
                               context,
                               16,
-                              FontWeight.w500,
+                              FontWeight.w700,
                               Colors.white,
                               TextDecoration.none,
                               FontStyle.normal,

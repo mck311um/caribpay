@@ -27,4 +27,18 @@ class AccountProvider with ChangeNotifier {
     _isLoading = false;
     notifyListeners();
   }
+
+  Future<void> addAccount(String accountName) async {
+    _isLoading = true;
+    notifyListeners();
+    _accounts = await _repo.addAccount(accountName);
+    if (_accounts.isNotEmpty) {
+      _selectedAccount = _accounts[0];
+    } else {
+      _selectedAccount = null;
+    }
+
+    _isLoading = false;
+    notifyListeners();
+  }
 }

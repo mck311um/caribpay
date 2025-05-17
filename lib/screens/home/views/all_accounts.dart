@@ -19,6 +19,12 @@ class _AllAccountsState extends State<AllAccounts> {
     final accountProvider = context.watch<AccountProvider>();
     final accounts = accountProvider.accounts;
 
+    final sortedAccounts = [...accounts]..sort((a, b) {
+      if (a.isPrimary && !b.isPrimary) return -1;
+      if (!a.isPrimary && b.isPrimary) return 1;
+      return 0;
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -33,10 +39,12 @@ class _AllAccountsState extends State<AllAccounts> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: ListView.builder(
-                itemCount: accounts.length,
+              child: ListView.separated(
+                separatorBuilder:
+                    (context, index) => const SizedBox(height: fSpacing),
+                itemCount: sortedAccounts.length,
                 itemBuilder: (context, index) {
-                  final account = accounts[index];
+                  final account = sortedAccounts[index];
                   return AccountCard(account: account);
                 },
               ),

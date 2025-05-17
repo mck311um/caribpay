@@ -75,7 +75,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               const SizedBox(height: fSmallSpacing),
               CustomTextField(
-                controller: _firstNameController,
+                controller: _lastNameController,
                 hintText: 'Doe',
                 labelText: "Last Name",
               ),

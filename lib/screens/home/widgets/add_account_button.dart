@@ -1,10 +1,30 @@
 import 'package:caribpay/constants/text_styles.dart';
 import 'package:caribpay/constants/values.dart';
+import 'package:caribpay/screens/home/widgets/add_account.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/components/button/gf_button.dart';
 
-class AddAccountButton extends StatelessWidget {
+class AddAccountButton extends StatefulWidget {
   const AddAccountButton({super.key});
+
+  @override
+  State<AddAccountButton> createState() => _AddAccountButtonState();
+}
+
+class _AddAccountButtonState extends State<AddAccountButton> {
+  final _accountNameController = TextEditingController();
+
+  bool isValid = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _accountNameController.addListener(() {
+      setState(() {
+        isValid = _accountNameController.text.isNotEmpty;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +51,22 @@ class AddAccountButton extends StatelessWidget {
 
         elevation: 0,
         icon: Icon(Icons.add, color: colorScheme.onSurface, size: 16),
-        onPressed: () {},
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: false,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            builder: (context) {
+              return SizedBox(
+                height: MediaQuery.of(context).size.height * 0.4,
+                width: double.infinity,
+                child: AddAccount(),
+              );
+            },
+          );
+        },
         text: 'Add Account',
         textStyle: getTextStyle(
           context,

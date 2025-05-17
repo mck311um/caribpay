@@ -7,6 +7,7 @@ import 'package:caribpay/providers/auth_provider.dart';
 import 'package:caribpay/screens/home/views/all_accounts.dart';
 import 'package:caribpay/screens/home/widgets/account_card.dart';
 import 'package:caribpay/screens/home/widgets/add_account_button.dart';
+import 'package:caribpay/screens/home/widgets/send_money.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:persistent_bottom_nav_bar_2/persistent_tab_view.dart';
@@ -35,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
               orElse: () => null as Account,
             )
             : null;
-    final otherAccounts = accounts.where((a) => !a.isPrimary).toList();
+    final otherAccount = accounts.where((a) => !a.isPrimary).first;
 
     return Scaffold(
       body: SafeArea(
@@ -120,14 +121,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     if (primaryAccount != null)
                       AccountCard(account: primaryAccount),
-                    ListView.builder(
-                      itemCount: otherAccounts.length,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return AccountCard(account: otherAccounts[index]);
-                      },
-                    ),
+                    const SizedBox(height: fSpacing),
+                    if (otherAccount != null)
+                      AccountCard(account: otherAccount),
                     const SizedBox(height: fSpacing),
                     AddAccountButton(),
                   ],
@@ -152,7 +148,26 @@ class _HomeScreenState extends State<HomeScreen> {
                       Expanded(
                         child: SizedBox.expand(
                           child: GFButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: false,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(20),
+                                  ),
+                                ),
+                                builder: (context) {
+                                  return SizedBox(
+                                    height:
+                                        MediaQuery.of(context).size.height *
+                                        0.35,
+                                    width: double.infinity,
+                                    child: SendMoney(),
+                                  );
+                                },
+                              );
+                            },
                             text: 'Send Money',
                             color: CustomColors.turquoise,
                             icon: Icon(

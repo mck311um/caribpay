@@ -34,7 +34,7 @@ class _AccountCardState extends State<AccountCard> {
       child: Container(
         height: 150,
         decoration: BoxDecoration(
-          color: colorScheme.surfaceContainerHighest,
+          color: colorScheme.surfaceContainer,
           borderRadius: BorderRadius.circular(fBorderRadius),
           boxShadow: [
             BoxShadow(

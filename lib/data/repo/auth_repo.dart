@@ -1,4 +1,5 @@
 import 'package:caribpay/data/models/auth_data.dart';
+import 'package:caribpay/data/models/user.dart';
 import 'package:caribpay/services/api.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:toastification/toastification.dart';
 
 mixin IAuthRepository {
   Future<AuthData?> login(String email, String password);
+  Future<UserModel?> updateUser(UserModel user);
 }
 
 class AuthRepo with IAuthRepository {
@@ -45,6 +47,48 @@ class AuthRepo with IAuthRepository {
         type: ToastificationType.error,
         title: Text(
           'Login Failed',
+          style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 16),
+        ),
+        description: Text(
+          message.toString(),
+          style: GoogleFonts.inter(fontWeight: FontWeight.w400, fontSize: 14),
+        ),
+        style: ToastificationStyle.flatColored,
+        primaryColor: Colors.red,
+        showProgressBar: false,
+        autoCloseDuration: const Duration(seconds: 3),
+        alignment: Alignment.bottomCenter,
+      );
+      return null;
+    }
+  }
+
+  @override
+  Future<UserModel?> updateUser(UserModel user) async {
+    try {
+      final res = await api.patch('/user/update', data: user.toJson());
+
+      return UserModel.fromJson(res.data);
+    } catch (e) {
+      logger.e('Updating User: $e');
+      var message = '';
+      if (e is DioException) {
+        final data = e.response?.data;
+        if (data is Map<String, dynamic>) {
+          message = data['message'] ?? 'Unknown error';
+        } else if (data is String) {
+          message = data;
+        } else {
+          message = e.message ?? 'Unknown Dio error';
+        }
+      } else {
+        message = e.toString();
+      }
+      logger.e('Updating User: $message');
+      toastification.show(
+        type: ToastificationType.error,
+        title: Text(
+          'Updating User Failed',
           style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 16),
         ),
         description: Text(

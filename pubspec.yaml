@@ -24,6 +24,9 @@ dependencies:
   loading_indicator: ^3.1.1
   flutter_native_splash: ^2.4.6
   persistent_bottom_nav_bar_2: ^5.0.3
+  bottom_picker: ^3.1.0
+  intl: ^0.20.2
+  drop_down_list: ^2.0.0
 
 dev_dependencies:
   flutter_test:

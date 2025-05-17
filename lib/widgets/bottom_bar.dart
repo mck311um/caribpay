@@ -17,7 +17,7 @@ class BottomBar extends StatefulWidget {
 class _BottomBarState extends State<BottomBar> {
   final double iconSize = 25;
   final PersistentTabController _controller = PersistentTabController(
-    initialIndex: 2,
+    initialIndex: 0,
   );
 
   List<Widget> _buildScreens() {

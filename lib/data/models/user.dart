@@ -97,4 +97,48 @@ class UserModel {
     'countryId': countryId,
     'isDeleted': isDeleted,
   };
+
+  UserModel copyWith({
+    String? id,
+    String? email,
+    String? password,
+    String? firstName,
+    String? lastName,
+    String? phone,
+    bool? verified,
+    DateTime? dateOfBirth,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? nationality,
+    String? idType,
+    String? idNumber,
+    String? idDocumentUrl,
+    String? addressLine1,
+    String? addressLine2,
+    String? city,
+    String? countryId,
+    bool? isDeleted,
+  }) {
+    return UserModel(
+      id: id ?? this.id,
+      email: email ?? this.email,
+      password: password ?? this.password,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      phone: phone ?? this.phone,
+      verified: verified ?? this.verified,
+      dateOfBirth: dateOfBirth ?? this.dateOfBirth,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      nationality: nationality ?? this.nationality,
+      idType: idType ?? this.idType,
+      idNumber: idNumber ?? this.idNumber,
+      idDocumentUrl: idDocumentUrl ?? this.idDocumentUrl,
+      addressLine1: addressLine1 ?? this.addressLine1,
+      addressLine2: addressLine2 ?? this.addressLine2,
+      city: city ?? this.city,
+      countryId: countryId ?? this.countryId,
+      isDeleted: isDeleted ?? this.isDeleted,
+    );
+  }
 }

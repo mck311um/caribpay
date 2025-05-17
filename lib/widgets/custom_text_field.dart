@@ -16,6 +16,9 @@ class CustomTextField extends StatelessWidget {
   final IconData? iconPrefix;
   final List<TextInputFormatter> formatters;
   final String? Function(String?)? validator;
+  final bool readOnly;
+  final Function()? onTap;
+  final Function(String)? onChanged;
 
   const CustomTextField({
     super.key,
@@ -30,6 +33,9 @@ class CustomTextField extends StatelessWidget {
     this.iconPrefix,
     this.formatters = const [],
     this.validator,
+    this.readOnly = false,
+    this.onTap,
+    this.onChanged,
   });
 
   @override
@@ -50,7 +56,7 @@ class CustomTextField extends StatelessWidget {
                     getTextStyle(
                       context,
                       16,
-                      FontWeight.w500,
+                      FontWeight.w600,
                       colorScheme.onSurface.withValues(alpha: 0.8),
                       TextDecoration.none,
                       FontStyle.normal,
@@ -65,6 +71,9 @@ class CustomTextField extends StatelessWidget {
             child: AbsorbPointer(
               absorbing: disabled,
               child: GFTextFieldRounded(
+                onTap: onTap,
+                readOnly: readOnly,
+                onChanged: onChanged,
                 iconPrefix: iconPrefix != null ? Icon(iconPrefix) : null,
                 marginhorizontal: 0,
                 paddinghorizontal: 0,
@@ -84,7 +93,7 @@ class CustomTextField extends StatelessWidget {
                 validator: validator,
                 style: getTextStyle(
                   context,
-                  16,
+                  14,
                   FontWeight.w500,
                   disabled
                       ? colorScheme.onSurface.withValues(alpha: 0.5)

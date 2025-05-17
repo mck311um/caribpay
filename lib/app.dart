@@ -1,4 +1,5 @@
 import 'package:caribpay/app_view.dart';
+import 'package:caribpay/providers/admin_provider.dart';
 import 'package:caribpay/providers/auth_provider.dart';
 import 'package:caribpay/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ class _AppState extends State<App> {
       providers: [
         ChangeNotifierProvider<ThemeProvider>(create: (_) => ThemeProvider()),
         ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
+        ChangeNotifierProvider<AdminProvider>(create: (_) => AdminProvider()),
       ],
       child: AppView(),
     );

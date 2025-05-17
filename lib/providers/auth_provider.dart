@@ -5,6 +5,7 @@ import 'package:caribpay/data/repo/auth_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/web.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toastification/toastification.dart';
 
 class AuthProvider extends ChangeNotifier {
   UserModel? _user;
@@ -20,7 +21,7 @@ class AuthProvider extends ChangeNotifier {
   final _repo = AuthRepo();
   final logger = Logger();
 
-  void setUser(UserModel? user) {
+  set user(UserModel? user) {
     _user = user;
     notifyListeners();
   }
@@ -48,6 +49,37 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future updateProfile(UserModel user) async {
+    _isLoading = true;
+    notifyListeners();
+
+    final res = await _repo.updateUser(user);
+    if (res != null) {
+      _user = res;
+      await saveToSharedPreferences();
+
+      toastification.show(
+        type: ToastificationType.success,
+        title: Text(
+          'Profile Updated',
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+        ),
+        description: Text(
+          'Your profile has been updated successfully.',
+          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
+        ),
+        style: ToastificationStyle.flatColored,
+        primaryColor: Colors.green,
+        showProgressBar: false,
+        autoCloseDuration: const Duration(seconds: 3),
+        alignment: Alignment.bottomCenter,
+      );
+    }
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
   Future saveToSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', _token ?? '');
@@ -55,15 +87,21 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future loadFromSharedPreferences() async {
+    _isLoading = true;
+    notifyListeners();
+
     final prefs = await SharedPreferences.getInstance();
     _token = prefs.getString('token');
     String? userJson = prefs.getString('user');
+
     if (_token != null && _token!.isNotEmpty && userJson != null) {
       _user = UserModel.fromJson(jsonDecode(userJson));
       _isSignedIn = true;
     } else {
       _isSignedIn = false;
     }
+
+    _isLoading = false;
     notifyListeners();
   }
 }

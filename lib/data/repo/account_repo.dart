@@ -1,10 +1,37 @@
+import 'package:caribpay/constants/enums.dart';
+import 'package:caribpay/constants/utils.dart';
 import 'package:caribpay/data/models/account.dart';
+import 'package:caribpay/data/models/peer.dart';
 import 'package:caribpay/services/api.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/web.dart';
+import 'package:toastification/toastification.dart';
 
 mixin IAccountRepository {
   Future<List<Account>> getAccounts();
+  Future<List<Peer>> getPeers();
   Future<List<Account>> addAccount(String accountName);
+  Future<QueryStatus> addPeer(
+    String peerName,
+    String phone,
+    String accountNumber,
+  );
+  Future<QueryStatus> internalTransfer(
+    String sendingAccount,
+    double amount,
+    String recipient,
+    double fee,
+    String reference,
+  );
+  Future<QueryStatus> externalTransfer(
+    String sendingAccount,
+    double amount,
+    String recipient,
+    double fee,
+    String reference,
+  );
 }
 
 class AccountRepo with IAccountRepository {
@@ -25,6 +52,19 @@ class AccountRepo with IAccountRepository {
   }
 
   @override
+  Future<List<Peer>> getPeers() async {
+    try {
+      final response = await api.get('account/peers');
+      final peersJson = response.data['data'] as List;
+      logger.i('Peers: $peersJson');
+      return peersJson.map((peer) => Peer.fromJson(peer)).toList();
+    } catch (e) {
+      logger.e('Failed to fetch peers: $e');
+      return [];
+    }
+  }
+
+  @override
   Future<List<Account>> addAccount(String accountName) async {
     try {
       final response = await api.post('/account/', data: {'name': accountName});
@@ -34,6 +74,74 @@ class AccountRepo with IAccountRepository {
     } catch (e) {
       logger.e('Failed to add account: $e');
       return [];
+    }
+  }
+
+  @override
+  Future<QueryStatus> addPeer(
+    String peerName,
+    String phone,
+    String accountNumber,
+  ) async {
+    try {
+      final data = {
+        'name': peerName,
+        'phone': phone,
+        'accountNumber': accountNumber,
+      };
+      await api.post('account/peer', data: data);
+      return QueryStatus.success;
+    } catch (e) {
+      handleTransactionError(e, title: 'Add Peer Failed');
+      return QueryStatus.error;
+    }
+  }
+
+  @override
+  Future<QueryStatus> internalTransfer(
+    String sendingAccount,
+    double amount,
+    String recipient,
+    double fee,
+    String reference,
+  ) async {
+    try {
+      final data = {
+        'accountNumber': sendingAccount,
+        'amount': amount,
+        'recipient': recipient,
+        'fee': fee,
+        'reference': reference,
+      };
+      await api.post('transaction/transfer/internal', data: data);
+      return QueryStatus.success;
+    } catch (e) {
+      handleTransactionError(e, title: 'Internal Transfer Failed');
+      return QueryStatus.error;
+    }
+  }
+
+  @override
+  Future<QueryStatus> externalTransfer(
+    String sendingAccount,
+    double amount,
+    String recipient,
+    double fee,
+    String reference,
+  ) async {
+    try {
+      final data = {
+        'accountNumber': sendingAccount,
+        'amount': amount,
+        'recipient': recipient,
+        'fee': fee,
+        'reference': reference,
+      };
+      await api.post('transaction/transfer', data: data);
+      return QueryStatus.success;
+    } catch (e) {
+      handleTransactionError(e, title: 'Internal Transfer Failed');
+      return QueryStatus.error;
     }
   }
 }

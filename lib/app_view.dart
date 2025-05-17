@@ -21,23 +21,38 @@ class AppView extends StatefulWidget {
 }
 
 class _AppViewState extends State<AppView> {
+  bool isInitializing = true;
+
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      context.read<AuthProvider>().loadFromSharedPreferences();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      initializeApp();
     });
-    loadData();
   }
 
-  void loadData() async {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final adminProvider = context.read<AdminProvider>();
-      final accountProvider = context.read<AccountProvider>();
+  Future<void> initializeApp() async {
+    final authProvider = context.read<AuthProvider>();
+    await authProvider.loadFromSharedPreferences();
 
-      await adminProvider.fetchAdminData();
-      await accountProvider.fetchAccounts();
+    if (authProvider.isSignedIn) {
+      await authProvider.getUser();
+    }
+
+    await loadData();
+
+    setState(() {
+      isInitializing = false;
     });
+  }
+
+  Future<void> loadData() async {
+    final adminProvider = context.read<AdminProvider>();
+    final accountProvider = context.read<AccountProvider>();
+
+    await adminProvider.fetchAdminData();
+    await accountProvider.fetchAccounts();
+    await accountProvider.getPeers();
   }
 
   @override
@@ -48,10 +63,10 @@ class _AppViewState extends State<AppView> {
     return ToastificationWrapper(
       child: MaterialApp(
         themeMode: themeProvider.themeMode,
-        theme: (ThemeData(colorScheme: lightColorScheme)),
-        darkTheme: (ThemeData(colorScheme: darkColorScheme)),
+        theme: ThemeData(colorScheme: lightColorScheme),
+        darkTheme: ThemeData(colorScheme: darkColorScheme),
         home:
-            authProvider.isLoading
+            isInitializing || authProvider.isLoading
                 ? const LoadingScreen()
                 : authProvider.isSignedIn
                 ? (authProvider.user?.countryId?.isEmpty ?? true

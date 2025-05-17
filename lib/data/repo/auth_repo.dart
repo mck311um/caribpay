@@ -1,3 +1,4 @@
+import 'package:caribpay/constants/utils.dart';
 import 'package:caribpay/data/models/auth_data.dart';
 import 'package:caribpay/data/models/user.dart';
 import 'package:caribpay/services/api.dart';
@@ -10,6 +11,7 @@ import 'package:toastification/toastification.dart';
 mixin IAuthRepository {
   Future<AuthData?> login(String email, String password);
   Future<UserModel?> updateUser(UserModel user);
+  Future<UserModel?> getUser();
 }
 
 class AuthRepo with IAuthRepository {
@@ -102,6 +104,17 @@ class AuthRepo with IAuthRepository {
         alignment: Alignment.bottomCenter,
       );
       return null;
+    }
+  }
+
+  @override
+  Future<UserModel> getUser() async {
+    try {
+      final res = await api.get('/user/');
+      return UserModel.fromJson(res.data);
+    } catch (e) {
+      handleTransactionError(e, title: 'Get User Failed');
+      rethrow;
     }
   }
 }

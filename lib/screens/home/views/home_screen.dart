@@ -8,6 +8,7 @@ import 'package:caribpay/screens/home/views/all_accounts.dart';
 import 'package:caribpay/screens/home/widgets/account_card.dart';
 import 'package:caribpay/screens/home/widgets/add_account_button.dart';
 import 'package:caribpay/screens/home/widgets/send_money.dart';
+import 'package:caribpay/widgets/custom_loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:persistent_bottom_nav_bar_2/persistent_tab_view.dart';
@@ -36,7 +37,10 @@ class _HomeScreenState extends State<HomeScreen> {
               orElse: () => null as Account,
             )
             : null;
-    final otherAccount = accounts.where((a) => !a.isPrimary).first;
+    final Account? otherAccount =
+        accounts.where((a) => !a.isPrimary).isNotEmpty
+            ? accounts.where((a) => !a.isPrimary).first
+            : null;
 
     return Scaffold(
       body: SafeArea(
@@ -117,17 +121,27 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
                 const SizedBox(height: fSpacing),
-                Column(
-                  children: [
-                    if (primaryAccount != null)
-                      AccountCard(account: primaryAccount),
-                    const SizedBox(height: fSpacing),
-                    if (otherAccount != null)
-                      AccountCard(account: otherAccount),
-                    const SizedBox(height: fSpacing),
-                    AddAccountButton(),
-                  ],
-                ),
+                accountProvider.isLoading
+                    ? Center(
+                      child: SizedBox(
+                        height: 200,
+                        child: SizedBox(
+                          height: 40,
+                          child: CustomLoadingIndicator(),
+                        ),
+                      ),
+                    )
+                    : Column(
+                      children: [
+                        if (primaryAccount != null)
+                          AccountCard(account: primaryAccount),
+                        const SizedBox(height: fSpacing),
+                        if (otherAccount != null)
+                          AccountCard(account: otherAccount),
+                        const SizedBox(height: fSpacing),
+                        AddAccountButton(),
+                      ],
+                    ),
                 const SizedBox(height: fSpacing * 2),
                 Text(
                   'Quick Actions',

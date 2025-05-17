@@ -32,7 +32,7 @@ class _AccountCardState extends State<AccountCard> {
     return GestureDetector(
       onTap: () {},
       child: Container(
-        height: 150,
+        height: 140,
         decoration: BoxDecoration(
           color: colorScheme.surfaceContainer,
           borderRadius: BorderRadius.circular(fBorderRadius),
@@ -98,7 +98,7 @@ class _AccountCardState extends State<AccountCard> {
                             formattedBalance,
                             style: getTextStyle(
                               context,
-                              32,
+                              28,
                               FontWeight.w600,
                               colorScheme.onSurface,
                               TextDecoration.none,

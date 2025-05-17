@@ -31,13 +31,23 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future getUser() async {
+    _isLoading = true;
+    notifyListeners();
+
+    _user = await _repo.getUser();
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
   Future login(String email, String password) async {
     _isLoading = true;
     notifyListeners();
 
     final res = await _repo.login(email, password);
     if (res != null) {
-      _user = res.user;
+      _user = await _repo.getUser();
       _token = res.token;
       _isSignedIn = true;
       await saveToSharedPreferences();
@@ -100,6 +110,22 @@ class AuthProvider extends ChangeNotifier {
     } else {
       _isSignedIn = false;
     }
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future logout() async {
+    _isLoading = true;
+    notifyListeners();
+
+    _user = null;
+    _token = null;
+    _isSignedIn = false;
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
+    await prefs.remove('user');
 
     _isLoading = false;
     notifyListeners();

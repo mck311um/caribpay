@@ -19,6 +19,9 @@ class CustomTextField extends StatelessWidget {
   final bool readOnly;
   final Function()? onTap;
   final Function(String)? onChanged;
+  final int minLines;
+  final int maxLines;
+  final TextInputAction inputAction;
 
   const CustomTextField({
     super.key,
@@ -36,6 +39,9 @@ class CustomTextField extends StatelessWidget {
     this.readOnly = false,
     this.onTap,
     this.onChanged,
+    this.minLines = 1,
+    this.maxLines = 1,
+    this.inputAction = TextInputAction.done,
   });
 
   @override
@@ -65,7 +71,7 @@ class CustomTextField extends StatelessWidget {
             ],
           ),
         SizedBox(
-          height: 60,
+          height: minLines == 1 ? 60 : 90,
           child: Opacity(
             opacity: disabled ? 0.6 : 1.0,
             child: AbsorbPointer(
@@ -77,10 +83,12 @@ class CustomTextField extends StatelessWidget {
                 iconPrefix: iconPrefix != null ? Icon(iconPrefix) : null,
                 marginhorizontal: 0,
                 paddinghorizontal: 0,
+                minLines: minLines,
+                maxLines: maxLines,
                 keyboardType: keyboardType,
                 editingbordercolor: colorScheme.primary,
                 errorbordercolor: colorScheme.error,
-
+                textInputAction: inputAction,
                 idlebordercolor:
                     disabled
                         ? colorScheme.onSurface.withValues(alpha: 0.3)

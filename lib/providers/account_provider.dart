@@ -1,13 +1,17 @@
+import 'package:caribpay/constants/enums.dart';
 import 'package:caribpay/data/models/account.dart';
+import 'package:caribpay/data/models/peer.dart';
 import 'package:caribpay/data/repo/account_repo.dart';
 import 'package:flutter/widgets.dart';
 
 class AccountProvider with ChangeNotifier {
   List<Account> _accounts = [];
+  List<Peer> _peers = [];
   Account? _selectedAccount;
   bool _isLoading = false;
 
   List<Account> get accounts => _accounts;
+  List<Peer> get peers => _peers;
   Account? get selectedAccount => _selectedAccount;
   bool get isLoading => _isLoading;
 
@@ -18,11 +22,16 @@ class AccountProvider with ChangeNotifier {
     notifyListeners();
 
     _accounts = await _repo.getAccounts();
-    if (_accounts.isNotEmpty) {
-      _selectedAccount = _accounts[0];
-    } else {
-      _selectedAccount = null;
-    }
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> getPeers() async {
+    _isLoading = true;
+    notifyListeners();
+
+    _peers = await _repo.getPeers();
 
     _isLoading = false;
     notifyListeners();
@@ -35,5 +44,75 @@ class AccountProvider with ChangeNotifier {
 
     _isLoading = false;
     notifyListeners();
+  }
+
+  Future<QueryStatus> addPeer(
+    String peerName,
+    String phone,
+    String accountNumber,
+  ) async {
+    _isLoading = true;
+    notifyListeners();
+
+    final status = await _repo.addPeer(peerName, phone, accountNumber);
+
+    _peers = await _repo.getPeers();
+
+    _isLoading = false;
+    notifyListeners();
+
+    return status;
+  }
+
+  Future<QueryStatus> internalTransfer(
+    String sendingAccount,
+    double amount,
+    String recipient,
+    double fee,
+    String reference,
+  ) async {
+    _isLoading = true;
+    notifyListeners();
+
+    final status = await _repo.internalTransfer(
+      sendingAccount,
+      amount,
+      recipient,
+      fee,
+      reference,
+    );
+
+    _accounts = await _repo.getAccounts();
+
+    _isLoading = false;
+    notifyListeners();
+
+    return status;
+  }
+
+  Future<QueryStatus> peerTransfer(
+    String sendingAccount,
+    double amount,
+    String recipient,
+    double fee,
+    String reference,
+  ) async {
+    _isLoading = true;
+    notifyListeners();
+
+    final status = await _repo.externalTransfer(
+      sendingAccount,
+      amount,
+      recipient,
+      fee,
+      reference,
+    );
+
+    _accounts = await _repo.getAccounts();
+
+    _isLoading = false;
+    notifyListeners();
+
+    return status;
   }
 }

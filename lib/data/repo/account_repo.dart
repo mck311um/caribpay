@@ -11,6 +11,9 @@ mixin IAccountRepository {
   Future<List<Peer>> getPeers();
   Future<List<Account>> addAccount(String accountName);
   Future<List<Transaction>> getTransactions();
+  Future<List<Transaction>> getTransactionsByAccountNumber(
+    String accountNumber,
+  );
 
   Future<QueryStatus> addPeer(
     String peerName,
@@ -148,6 +151,23 @@ class AccountRepo with IAccountRepository {
   Future<List<Transaction>> getTransactions() async {
     try {
       final response = await api.get('/transaction/history');
+      final transactionsJson = response.data['data'] as List;
+      logger.i('Transactions: $transactionsJson');
+      return transactionsJson
+          .map((transaction) => Transaction.fromJson(transaction))
+          .toList();
+    } catch (e) {
+      logger.e('Failed to fetch transactions: $e');
+      return [];
+    }
+  }
+
+  @override
+  Future<List<Transaction>> getTransactionsByAccountNumber(
+    String accountNumber,
+  ) async {
+    try {
+      final response = await api.get('transaction/history/$accountNumber');
       final transactionsJson = response.data['data'] as List;
       logger.i('Transactions: $transactionsJson');
       return transactionsJson

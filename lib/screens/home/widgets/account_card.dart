@@ -2,8 +2,10 @@ import 'package:caribpay/constants/color_scheme.dart';
 import 'package:caribpay/constants/text_styles.dart';
 import 'package:caribpay/constants/values.dart';
 import 'package:caribpay/data/models/account.dart';
+import 'package:caribpay/screens/home/views/account_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:persistent_bottom_nav_bar_2/persistent_tab_view.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class AccountCard extends StatefulWidget {
@@ -30,7 +32,13 @@ class _AccountCardState extends State<AccountCard> {
     ).format(balance);
 
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        PersistentNavBarNavigator.pushNewScreen(
+          context,
+          screen: AccountScreen(account: widget.account),
+          withNavBar: false,
+        );
+      },
       child: Container(
         height: 140,
         decoration: BoxDecoration(
@@ -48,7 +56,13 @@ class _AccountCardState extends State<AccountCard> {
           color: Colors.transparent,
           child: InkWell(
             borderRadius: BorderRadius.circular(fBorderRadius),
-            onTap: () {},
+            onTap: () {
+              PersistentNavBarNavigator.pushNewScreen(
+                context,
+                screen: AccountScreen(account: widget.account),
+                withNavBar: false,
+              );
+            },
             child: Padding(
               padding: const EdgeInsets.all(fPadding),
               child: Column(

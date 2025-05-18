@@ -50,6 +50,20 @@ class AccountProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<List<Transaction>> fetchTransactionsByAccountNumber(
+    String accountNumber,
+  ) async {
+    _isLoading = true;
+    notifyListeners();
+
+    final res = await _repo.getTransactionsByAccountNumber(accountNumber);
+
+    _isLoading = false;
+    notifyListeners();
+
+    return res;
+  }
+
   Future<void> addAccount(String accountName) async {
     _isLoading = true;
     notifyListeners();

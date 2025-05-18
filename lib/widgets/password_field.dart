@@ -15,6 +15,7 @@ class PasswordField extends StatefulWidget {
   final bool showForgotPassword;
   final List<TextInputFormatter> formatters;
   final String? Function(String?)? validator;
+  final Function(String)? onChanged;
 
   const PasswordField({
     super.key,
@@ -28,6 +29,7 @@ class PasswordField extends StatefulWidget {
     this.showForgotPassword = true,
     this.formatters = const [],
     this.validator,
+    this.onChanged,
   });
 
   @override
@@ -124,7 +126,10 @@ class _PasswordFieldState extends State<PasswordField> {
                               TextDecoration.none,
                               FontStyle.normal,
                             ),
-                            onChanged: (_) {
+                            onChanged: (value) {
+                              if (widget.onChanged != null) {
+                                widget.onChanged!(value);
+                              }
                               formFieldState.didChange(widget.controller.text);
                             },
                           ),

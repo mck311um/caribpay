@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:caribpay/constants/enums.dart';
 import 'package:caribpay/data/models/user.dart';
 import 'package:caribpay/data/repo/auth_repo.dart';
 import 'package:flutter/material.dart';
@@ -57,6 +58,30 @@ class AuthProvider extends ChangeNotifier {
 
     _isLoading = false;
     notifyListeners();
+  }
+
+  Future<QueryStatus> register(
+    String firstName,
+    String lastName,
+    String email,
+    String phone,
+    String password,
+  ) async {
+    _isLoading = true;
+    notifyListeners();
+
+    var status = await _repo.register(
+      firstName,
+      lastName,
+      email,
+      phone,
+      password,
+    );
+
+    _isLoading = false;
+    notifyListeners();
+
+    return status;
   }
 
   Future updateProfile(UserModel user) async {

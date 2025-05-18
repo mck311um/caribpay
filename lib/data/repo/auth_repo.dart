@@ -1,3 +1,4 @@
+import 'package:caribpay/constants/enums.dart';
 import 'package:caribpay/constants/utils.dart';
 import 'package:caribpay/data/models/auth_data.dart';
 import 'package:caribpay/data/models/user.dart';
@@ -10,6 +11,13 @@ import 'package:toastification/toastification.dart';
 
 mixin IAuthRepository {
   Future<AuthData?> login(String email, String password);
+  Future<QueryStatus> register(
+    String firstName,
+    String lastName,
+    String email,
+    String phone,
+    String password,
+  );
   Future<UserModel?> updateUser(UserModel user);
   Future<UserModel?> getUser();
 }
@@ -115,6 +123,33 @@ class AuthRepo with IAuthRepository {
     } catch (e) {
       handleTransactionError(e, title: 'Get User Failed');
       rethrow;
+    }
+  }
+
+  @override
+  Future<QueryStatus> register(
+    String firstName,
+    String lastName,
+    String email,
+    String phone,
+    String password,
+  ) async {
+    try {
+      final res = await api.post(
+        '/auth/register',
+        data: {
+          'firstName': firstName,
+          'lastName': lastName,
+          'email': email,
+          'phone': phone,
+          'password': password,
+        },
+      );
+
+      return QueryStatus.success;
+    } catch (e) {
+      handleTransactionError(e, title: 'Register Failed');
+      return QueryStatus.error;
     }
   }
 }

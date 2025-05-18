@@ -1,5 +1,4 @@
 import 'package:caribpay/constants/color_scheme.dart';
-import 'package:caribpay/constants/enums.dart';
 import 'package:caribpay/constants/text_styles.dart';
 import 'package:caribpay/constants/values.dart';
 import 'package:caribpay/data/models/account.dart';

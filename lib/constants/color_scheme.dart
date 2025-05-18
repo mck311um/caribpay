@@ -71,4 +71,9 @@ const darkColorScheme = ColorScheme(
   onInverseSurface: Color(0xFF1E293B),
   inversePrimary: Color(0xFF0369A1),
   surfaceTint: Color(0xFF38BDF8),
+  surfaceContainerHighest: Color(0xFF373A3D),
+  surfaceContainerHigh: Color(0xFF2C2F32),
+  surfaceContainer: Color(0xFF2D3134),
+  surfaceContainerLow: Color(0xFF1D1F21),
+  surfaceContainerLowest: Color(0xFF141618),
 );

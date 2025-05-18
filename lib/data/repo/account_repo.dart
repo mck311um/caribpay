@@ -169,7 +169,6 @@ class AccountRepo with IAccountRepository {
     try {
       final response = await api.get('transaction/history/$accountNumber');
       final transactionsJson = response.data['data'] as List;
-      logger.i('Transactions: $transactionsJson');
       return transactionsJson
           .map((transaction) => Transaction.fromJson(transaction))
           .toList();

@@ -2,6 +2,7 @@ import 'package:caribpay/constants/enums.dart';
 import 'package:caribpay/constants/utils.dart';
 import 'package:caribpay/data/models/account.dart';
 import 'package:caribpay/data/models/peer.dart';
+import 'package:caribpay/data/models/transaction.dart';
 import 'package:caribpay/services/api.dart';
 import 'package:logger/web.dart';
 
@@ -9,6 +10,8 @@ mixin IAccountRepository {
   Future<List<Account>> getAccounts();
   Future<List<Peer>> getPeers();
   Future<List<Account>> addAccount(String accountName);
+  Future<List<Transaction>> getTransactions();
+
   Future<QueryStatus> addPeer(
     String peerName,
     String phone,
@@ -138,6 +141,21 @@ class AccountRepo with IAccountRepository {
     } catch (e) {
       handleTransactionError(e, title: 'Internal Transfer Failed');
       return QueryStatus.error;
+    }
+  }
+
+  @override
+  Future<List<Transaction>> getTransactions() async {
+    try {
+      final response = await api.get('/transaction/history');
+      final transactionsJson = response.data['data'] as List;
+      logger.i('Transactions: $transactionsJson');
+      return transactionsJson
+          .map((transaction) => Transaction.fromJson(transaction))
+          .toList();
+    } catch (e) {
+      logger.e('Failed to fetch transactions: $e');
+      return [];
     }
   }
 }

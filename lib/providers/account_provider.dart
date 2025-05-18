@@ -1,16 +1,19 @@
 import 'package:caribpay/constants/enums.dart';
 import 'package:caribpay/data/models/account.dart';
 import 'package:caribpay/data/models/peer.dart';
+import 'package:caribpay/data/models/transaction.dart';
 import 'package:caribpay/data/repo/account_repo.dart';
 import 'package:flutter/widgets.dart';
 
 class AccountProvider with ChangeNotifier {
   List<Account> _accounts = [];
   List<Peer> _peers = [];
+  List<Transaction> _transactions = [];
   Account? _selectedAccount;
   bool _isLoading = false;
 
   List<Account> get accounts => _accounts;
+  List<Transaction> get transactions => _transactions;
   List<Peer> get peers => _peers;
   Account? get selectedAccount => _selectedAccount;
   bool get isLoading => _isLoading;
@@ -32,6 +35,16 @@ class AccountProvider with ChangeNotifier {
     notifyListeners();
 
     _peers = await _repo.getPeers();
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> fetchTransactions() async {
+    _isLoading = true;
+    notifyListeners();
+
+    _transactions = await _repo.getTransactions();
 
     _isLoading = false;
     notifyListeners();

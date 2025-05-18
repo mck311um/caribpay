@@ -29,6 +29,20 @@ class Account {
     this.currency,
   });
 
+  static var empty = Account(
+    id: '',
+    name: '',
+    userId: '',
+    currencyId: '',
+    countryId: '',
+    balance: 0.0,
+    accountNumber: '',
+    createdAt: DateTime.now(),
+    updatedAt: DateTime.now(),
+    isPrimary: false,
+    isDeleted: false,
+  );
+
   Account copyWith({
     String? id,
     String? name,
